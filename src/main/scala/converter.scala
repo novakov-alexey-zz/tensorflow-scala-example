@@ -15,7 +15,7 @@ object converter {
 
   def transform[T: ClassTag](
       data: Matrix[String]
-  ) = data.map(a => transformArr[T](a))    
+  ): Matrix[T] = data.map(a => transformArr[T](a))
 
   def transformArr[T: ClassTag](data: Array[String]): Array[T] =
     implicitly[ClassTag[T]].runtimeClass match {

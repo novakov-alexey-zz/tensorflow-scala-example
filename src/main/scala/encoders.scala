@@ -1,10 +1,9 @@
-import Encoder._
 import converter._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.ClassTag
 
-object Encoder {
+object encoders {
   def toClasses[T: ClassTag: Ordering, U: ClassTag](
       samples: Array[T]
   ): Map[T, U] =

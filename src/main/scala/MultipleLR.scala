@@ -7,9 +7,8 @@ import org.platanios.tensorflow.api.ops.control_flow.CondArg._
 import java.nio.file.{Paths, Path}
 import org.platanios.tensorflow.data.utilities.UniformSplit
 import scala.reflect.ClassTag
-import Encoder.LabelEncoder
 import converter._
-import Encoder._
+import encoders._
 
 object MultipleLR extends App {
   val features = 12
@@ -43,11 +42,12 @@ object MultipleLR extends App {
   val accMetric = tf.metrics.MapMetric(
     (v: (Output[Float], (Output[Float], Output[Float]))) => {
       val positives = v._1 > 0.5f
+      val shape = Shape(batchSize, positives.shape(1))
       val binary = tf
         .select(
           positives,
-          tf.fill(Shape(batchSize, positives.shape(1)))(1f),
-          tf.fill(Shape(batchSize, positives.shape(1)))(0f)
+          tf.fill(shape)(1f),
+          tf.fill(shape)(0f)
         )
         .toFloat
       (binary, v._2._2.toFloat)

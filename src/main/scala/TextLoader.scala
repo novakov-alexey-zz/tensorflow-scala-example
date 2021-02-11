@@ -1,5 +1,3 @@
-import org.platanios.tensorflow.api._
-
 import java.io.File
 import java.nio.file.Path
 import scala.io.Source
@@ -7,7 +5,6 @@ import scala.reflect.ClassTag
 import scala.util.Using
 import TextLoader._
 import converter._
-import scala.collection.mutable.ArrayBuffer
 
 object TextLoader {
   val defaultDelimiter: String = ","
@@ -71,6 +68,12 @@ case class TextLoader(
     copy(data = data)
   }
 
+  /** @param from column index
+    * @param to column index (excluding last index).
+    *           Negative column starts from the last column and adds `cols` to get target index
+    * @tparam T type of the data
+    * @return
+    */
   def cols[T: ClassTag](from: Int, to: Int): Array[Array[T]] =
     transform[T](slice(data, None, Some((from, to))))
 
