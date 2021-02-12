@@ -25,9 +25,7 @@ object MultipleLR extends App {
       tf.learn.Linear[Float]("OutputLayer/Linear", 1) >>
       tf.learn.Sigmoid[Float]("OutputLayer/Sigmoid")
 
-  val loss = tf.learn.L2Loss[Float, Float]("Loss/L2Loss") >>
-    tf.learn.Mean[Float]("Loss/Mean") >>
-    tf.learn.ScalarSummary[Float]("Loss/Summary", "Loss")
+  val loss = tf.learn.L2Loss[Float, Float]("Loss/L2Loss")
   val optimizer = tf.train.Adam()
 
   val model = tf.learn.Model.simpleSupervised(
@@ -131,14 +129,14 @@ object MultipleLR extends App {
   private def createEncoders[T: Numeric: ClassTag](
       data: Matrix[String]
   ): Matrix[String] => Matrix[T] = {
-    val encoder = LabelEncoder[String]().fit(TextLoader.column(data, 2))
-    val hotEncoder = OneHotEncoder[String, T]().fit(TextLoader.column(data, 1))
+    val encoder = LabelEncoder.fit[String](TextLoader.column(data, 2))
+    val hotEncoder = OneHotEncoder.fit[String, T](TextLoader.column(data, 1))
 
     val label = t => encoder.transform(t, 2)
-    val hot = t => hotEncoder.transform(t, 1)
+    val onehot = t => hotEncoder.transform(t, 1)
     val typeTransform = (t: Matrix[String]) => transform[T](t)
 
-    label andThen hot andThen typeTransform
+    label andThen onehot andThen typeTransform
   }
 
   def loadData() = {

@@ -11,6 +11,12 @@ object encoders {
       .mapValues(transformAny[Int, U])
       .toMap[T, U]
 
+
+  object LabelEncoder {
+    def fit[T: ClassTag: Ordering](samples: Array[T]): LabelEncoder[T] =
+      LabelEncoder[T]().fit(samples)
+  } 
+
   case class LabelEncoder[T: ClassTag: Ordering](
       classes: Map[T, T] = Map.empty[T, T]
   ) {
@@ -25,6 +31,13 @@ object encoders {
       )
       data
     }
+  }
+
+  object OneHotEncoder {
+    def fit[T: Ordering: ClassTag, U: Numeric: Ordering: ClassTag](
+        samples: Array[T]
+    ): OneHotEncoder[T, U] =
+      OneHotEncoder[T, U]().fit(samples)
   }
 
   case class OneHotEncoder[
