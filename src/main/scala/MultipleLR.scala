@@ -25,7 +25,8 @@ object MultipleLR extends App {
       tf.learn.Linear[Float]("OutputLayer/Linear", 1) >>
       tf.learn.Sigmoid[Float]("OutputLayer/Sigmoid")
 
-  val loss = tf.learn.L2Loss[Float, Float]("Loss/L2Loss")
+  val loss = tf.learn.L2Loss[Float, Float]("Loss/L2Loss") >>
+    tf.learn.ScalarSummary[Float]("Loss/Summary", "Loss")
   val optimizer = tf.train.Adam()
 
   val model = tf.learn.Model.simpleSupervised(
@@ -39,7 +40,8 @@ object MultipleLR extends App {
 
   val accMetric = tf.metrics.MapMetric(
     (v: (Output[Float], (Output[Float], Output[Float]))) => {
-      val positives = v._1 > 0.5f
+      val (predicted, (_, actual)) = v
+      val positives = predicted > 0.5f
       val shape = Shape(batchSize, positives.shape(1))
       val binary = tf
         .select(
@@ -48,7 +50,7 @@ object MultipleLR extends App {
           tf.fill(shape)(0f)
         )
         .toFloat
-      (binary, v._2._2.toFloat)
+      (binary, actual.toFloat)
     },
     tf.metrics.Accuracy("Accuracy")
   )

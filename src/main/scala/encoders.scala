@@ -11,11 +11,10 @@ object encoders {
       .mapValues(transformAny[Int, U])
       .toMap[T, U]
 
-
   object LabelEncoder {
     def fit[T: ClassTag: Ordering](samples: Array[T]): LabelEncoder[T] =
       LabelEncoder[T]().fit(samples)
-  } 
+  }
 
   case class LabelEncoder[T: ClassTag: Ordering](
       classes: Map[T, T] = Map.empty[T, T]
@@ -23,14 +22,12 @@ object encoders {
     def fit(samples: Array[T]): LabelEncoder[T] =
       LabelEncoder(toClasses[T, T](samples))
 
-    def transform(t: Matrix[T], col: Int): Matrix[T] = {
-      val data = t.map(
+    def transform(t: Matrix[T], col: Int): Matrix[T] =
+      t.map(
         _.zipWithIndex.map { case (d, i) =>
           if (i == col) classes.getOrElse(d, d) else d
         }
       )
-      data
-    }
   }
 
   object OneHotEncoder {
