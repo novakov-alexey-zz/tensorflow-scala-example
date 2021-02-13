@@ -78,6 +78,7 @@ object MultipleLR extends App {
     Set(
       tf.learn.LossLogger(trigger = tf.learn.StepHookTrigger(100)),
       tf.learn.Evaluator(
+        summaryDir = summariesDir,
         log = true,
         datasets =
           Seq(("Train", () => evalTrainData), ("Test", () => evalTestData)),
