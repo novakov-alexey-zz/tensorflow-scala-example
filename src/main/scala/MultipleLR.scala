@@ -49,8 +49,7 @@ object MultipleLR extends App {
           tf.fill(shape)(1f),
           tf.fill(shape)(0f)
         )
-        .toFloat
-      (binary, actual.toFloat)
+      (binary, actual)
     },
     tf.metrics.Accuracy("Accuracy")
   )
@@ -145,10 +144,10 @@ object MultipleLR extends App {
     val loader = TextLoader(
       Path.of("data/Churn_Modelling.csv")
     ).load()
-    val data = loader.cols[String](3, -1)
+    val featureData = loader.cols[String](3, -1)
 
-    val encoders = createEncoders[Float](data)
-    val numericData = encoders(data)
+    val encoders = createEncoders[Float](featureData)
+    val numericData = encoders(featureData)
     val scaler = StandardScaler[Float]().fit(numericData)
 
     val prepareData = (t: Matrix[String]) => {
@@ -156,12 +155,12 @@ object MultipleLR extends App {
       scaler.transform(numericData)
     }
 
-    val xMatrix = prepareData(data)
-    val yVector = loader.col[Float](-1)
+    val xMatrix = prepareData(featureData)
     val xData = xMatrix.map(a => Tensor(a.toSeq)).toSeq
+    val targetData = loader.col[Float](-1)
 
     val x = Tensor(xData).reshape(Shape(-1, features))
-    val y = Tensor(yVector.toSeq).reshape(Shape(-1, targets))
+    val y = Tensor(targetData.toSeq).reshape(Shape(-1, targets))
 
     val split = UniformSplit(x.shape(0), None)
     val (trainIndices, testIndices) = split(trainPortion = 0.8f)
