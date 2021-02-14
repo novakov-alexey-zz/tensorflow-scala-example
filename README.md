@@ -4,7 +4,7 @@ Model training using [eaplatanios/tensorflow_scala](https://github.com/eaplatani
 
 ## Code
 
-Multiple Linear Regression: [src/main/scala/MultipleLR.scala](src/main/scala/MultipleLR.scala)
+Multiple Linear Regression: [src/main/scala/tensorflow/tutorial/MultipleLR.scala](src/main/scala/tensorflow/tutorial/MultipleLR.scala)
 
 ## Run OSX
 

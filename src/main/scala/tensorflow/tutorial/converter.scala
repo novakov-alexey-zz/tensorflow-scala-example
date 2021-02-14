@@ -1,3 +1,5 @@
+package tensorflow.tutorial
+
 import ImplicitConfigHelper._
 
 import scala.reflect.ClassTag

@@ -1,3 +1,5 @@
+package tensorflow.tutorial
+
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.ClipGradientsByGlobalNorm
 import org.platanios.tensorflow.api.learn.layers.Compose
@@ -7,8 +9,8 @@ import org.platanios.tensorflow.api.ops.control_flow.CondArg._
 import java.nio.file.{Paths, Path}
 import org.platanios.tensorflow.data.utilities.UniformSplit
 import scala.reflect.ClassTag
-import converter._
-import encoders._
+import tensorflow.tutorial.converter._
+import tensorflow.tutorial.encoders._
 
 object MultipleLR extends App {
   val features = 12
@@ -142,9 +144,8 @@ object MultipleLR extends App {
   }
 
   def loadData() = {
-    val loader = TextLoader(
-      Path.of("data/Churn_Modelling.csv")
-    ).load()
+    val path = args.headOption.getOrElse("data/Churn_Modelling.csv")
+    val loader = TextLoader(Path.of(path)).load()
     val featureData = loader.cols[String](3, -1)
 
     val encoders = createEncoders[Float](featureData)

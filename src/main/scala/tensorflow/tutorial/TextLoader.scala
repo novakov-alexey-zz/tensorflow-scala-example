@@ -1,10 +1,12 @@
+package tensorflow.tutorial
+
 import java.io.File
 import java.nio.file.Path
 import scala.io.Source
 import scala.reflect.ClassTag
 import scala.util.Using
-import TextLoader._
-import converter._
+import tensorflow.tutorial.TextLoader._
+import tensorflow.tutorial.converter._
 
 object TextLoader {
   val defaultDelimiter: String = ","

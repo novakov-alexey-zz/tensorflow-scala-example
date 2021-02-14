@@ -1,4 +1,6 @@
-import converter._
+package tensorflow.tutorial
+
+import tensorflow.tutorial.converter._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.ClassTag
